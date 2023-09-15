@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectMongoDb from "@configs/database";
 import router from "@routes/index";
 import { WebSocketServer } from "ws";
+import cors from "cors";
 
 dotenv.config();
 connectMongoDb();
@@ -13,6 +14,7 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(express.json());
+app.use(cors());
 
 const port = (process.env.PORT || 3000) as number;
 server.listen(port, () => {

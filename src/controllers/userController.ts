@@ -72,20 +72,18 @@ export const login = async (req: express.Request, res: express.Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.sendStatus(400), { statusCode: 4001 };
+      return res.status(400).json({ statusCode: 4001 });
     }
 
     const user = await getUserByEmail(email).select("password");
 
     if (!user) {
-      return res.sendStatus(400);
+      return res.status(400).json({ statusCode: 4002 });
     }
 
     if (user.password != password) {
-      return res.sendStatus(403);
+      return res.status(403).json({ statusCode: 4003 });
     }
-
-    await user.save();
 
     const token = jwt.sign({ email }, process.env.JWT_SIGN_SECRET as string, {
       expiresIn: "12h",
@@ -103,13 +101,13 @@ export const register = async (req: express.Request, res: express.Response) => {
     const { email, password, username } = req.body;
 
     if (!email || !password || !username) {
-      return res.sendStatus(400);
+      return res.status(400);
     }
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      return res.sendStatus(400);
+      return res.status(400);
     }
 
     const user = await createUser({
