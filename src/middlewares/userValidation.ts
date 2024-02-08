@@ -10,10 +10,13 @@ const isAuth = (
   let token;
   try {
     if (req.headers["authorization"] === undefined) {
-      return res.status(400).json({
-        statusCode: statusCodes.UNAUTHORIZED_FIELD_UNFULFILLMENT,
-        message: "Authorization should not be empty",
-      });
+      return res
+        .status(400)
+        .json({
+          statusCode: statusCodes.UNAUTHORIZED_FIELD_UNFULFILLMENT,
+          message: "Authorization should not be empty",
+        })
+        .end();
     }
 
     token = req.headers["authorization"].split(" ")[1];
@@ -23,10 +26,13 @@ const isAuth = (
 
   jwt.verify(token, process.env.JWT_SIGN_SECRET as string, (err, decoded) => {
     if (err) {
-      return res.status(400).json({
-        statusCode: statusCodes.UNAUTHORIZED,
-        message: "Unauthorized",
-      });
+      return res
+        .status(400)
+        .json({
+          statusCode: statusCodes.UNAUTHORIZED,
+          message: "Unauthorized",
+        })
+        .end();
     } else {
       next();
     }

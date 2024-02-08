@@ -5,11 +5,13 @@ import {
   updateUser,
   register,
   login,
+  checkLogin,
 } from "@controllers/userController";
 import isAuth from "@middlewares/userValidation";
 
 export default (router: express.Router) => {
   router.get("/users", isAuth, getAllUsers);
+  router.get("/users/checkLogin", isAuth, checkLogin);
   router.delete("/users/:id", isAuth, deleteUser);
   router.patch("/users/:id", isAuth, updateUser);
 

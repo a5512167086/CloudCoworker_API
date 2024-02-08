@@ -8,3 +8,7 @@ export enum statusCodes {
   NON_EXISTING_USER = 5014,
   PASSWORD_NOT_CORRECT = 5015,
 }
+
+interface JwtPayload {
+  email: string;
+}

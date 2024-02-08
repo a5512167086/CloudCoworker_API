@@ -1,5 +1,5 @@
 import express from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import {
   deleteUserById,
   getUsers,
@@ -116,6 +116,30 @@ export const register = async (req: express.Request, res: express.Response) => {
     });
 
     return res.status(200).json({ message: "Success" }).end();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400).end();
+  }
+};
+
+export const checkLogin = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const token = req.headers.authorization!.split(" ")[1];
+
+    const userData = jwt.decode(token) as JwtPayload;
+    const user = await getUserByEmail(userData.email);
+
+    if (!user) {
+      return res.sendStatus(400).json({ message: "User not found" }).end();
+    }
+
+    return res
+      .status(200)
+      .json({ userEmail: user.email, userName: user.username, token: token })
+      .end();
   } catch (error) {
     console.log(error);
     return res.sendStatus(400).end();
