@@ -18,7 +18,7 @@ export const getAllUsers = async (
     return res.status(200).json(users).end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).end();
+    return res.sendStatus(400);
   }
 };
 
@@ -27,14 +27,21 @@ export const deleteUser = async (
   res: express.Response
 ) => {
   try {
-    const { id } = req.params;
+    const token = req.headers.authorization!.split(" ")[1];
 
-    const deletedUser = await deleteUserById(id);
+    const userData = jwt.decode(token) as JwtPayload;
+    const user = await getUserByEmail(userData.email);
 
-    return res.sendStatus(200).json(deletedUser).end();
+    if (!user) {
+      return res.status(400).json({ message: "User not found" }).end();
+    }
+
+    const deletedUser = await deleteUserById(user["_id"]);
+
+    return res.status(200).json(deletedUser).end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).end();
+    return res.sendStatus(400);
   }
 };
 
@@ -47,13 +54,13 @@ export const updateUser = async (
     const { username } = req.body;
 
     if (!username) {
-      return res.sendStatus(400).end();
+      return res.status(400).end();
     }
 
     const user = await getUserById(id);
 
     if (user === null) {
-      return res.sendStatus(400).end();
+      return res.status(400).end();
     }
 
     user.username = username;
@@ -63,7 +70,7 @@ export const updateUser = async (
     return res.status(200).json(user).end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).end();
+    return res.sendStatus(400);
   }
 };
 
@@ -91,7 +98,7 @@ export const login = async (req: express.Request, res: express.Response) => {
       .end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).end();
+    return res.sendStatus(400);
   }
 };
 
@@ -118,7 +125,7 @@ export const register = async (req: express.Request, res: express.Response) => {
     return res.status(200).json({ message: "Success" }).end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).end();
+    return res.sendStatus(400);
   }
 };
 
@@ -128,12 +135,11 @@ export const checkLogin = async (
 ) => {
   try {
     const token = req.headers.authorization!.split(" ")[1];
-
     const userData = jwt.decode(token) as JwtPayload;
     const user = await getUserByEmail(userData.email);
 
     if (!user) {
-      return res.sendStatus(400).json({ message: "User not found" }).end();
+      return res.status(400).json({ message: "User not found" }).end();
     }
 
     return res
@@ -142,6 +148,6 @@ export const checkLogin = async (
       .end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).end();
+    return res.sendStatus(400);
   }
 };
