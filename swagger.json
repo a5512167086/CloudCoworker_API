@@ -1,0 +1,448 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Cloud Worker API",
+    "version": "1.0.0"
+  },
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/api/v1/users": {
+      "get": {
+        "summary": "Get all users",
+        "description": "Get all users",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT of user",
+            "required": true,
+            "schema": {
+              "type": "JWT"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get all users"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/users/{userId}": {
+      "patch": {
+        "summary": "Update user name",
+        "description": "Update user name by user id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT of user",
+            "required": true,
+            "schema": {
+              "type": "JWT"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success update user name"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["User"]
+      },
+      "delete": {
+        "summary": "Delete user",
+        "description": "Delete user by user id",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT of user",
+            "required": true,
+            "schema": {
+              "type": "JWT"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete user"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/users/register": {
+      "post": {
+        "summary": "Register user",
+        "description": "Register user",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email of new user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Password of new user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "password"
+            }
+          },
+          {
+            "name": "username",
+            "in": "body",
+            "description": "Username of new user",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success register user"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/users/login": {
+      "post": {
+        "summary": "Login user",
+        "description": "Login user",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "body",
+            "description": "Email of user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          {
+            "name": "password",
+            "in": "body",
+            "description": "Password of user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "password"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success login user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userName": {
+                      "type": "string"
+                    },
+                    "userEmail": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/users/checkLogin": {
+      "post": {
+        "summary": "Check current login status",
+        "description": "Check current login status",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT of user",
+            "required": true,
+            "schema": {
+              "type": "JWT"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success login user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userName": {
+                      "type": "string"
+                    },
+                    "userEmail": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["User"]
+      }
+    },
+    "/api/v1/organization": {
+      "post": {
+        "summary": "Create new organization",
+        "description": "Create new organization",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT of user",
+            "required": true,
+            "schema": {
+              "type": "JWT"
+            }
+          },
+          {
+            "name": "organizationName",
+            "in": "body",
+            "description": "Organization name for new organization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success create organization"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["Organization"]
+      }
+    },
+    "/api/v1/organization/join": {
+      "post": {
+        "summary": "Join organization",
+        "description": "Join organization",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT of user",
+            "required": true,
+            "schema": {
+              "type": "JWT"
+            }
+          },
+          {
+            "name": "inviteCode",
+            "in": "body",
+            "description": "InviteCode of organization which you want to join",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success join organization"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["Organization"]
+      }
+    },
+    "/api/v1/organization/leave": {
+      "post": {
+        "summary": "Leave current organization",
+        "description": "Leave current organization",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT of user",
+            "required": true,
+            "schema": {
+              "type": "JWT"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success leave organization"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["Organization"]
+      }
+    },
+    "/api/v1/organization/delete": {
+      "post": {
+        "summary": "Delete own organization",
+        "description": "Delete own organization",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "JWT of user",
+            "required": true,
+            "schema": {
+              "type": "JWT"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete organization"
+          },
+          "400": {
+            "description": "Bad request"
+          }
+        },
+        "tags": ["Organization"]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userName": {
+            "type": "string"
+          },
+          "userEmail": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "format": "password"
+          },
+          "organization": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "Organization": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "organizationName": {
+            "type": "string"
+          },
+          "inviteCode": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Owner user id",
+            "format": "uuid"
+          },
+          "members": {
+            "type": "array",
+            "description": "Array of member users id",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}

@@ -5,6 +5,8 @@ import connectMongoDb from "@configs/database";
 import router from "@routes/index";
 import { WebSocketServer } from "ws";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../swagger.json";
 
 dotenv.config();
 connectMongoDb();
@@ -22,6 +24,7 @@ server.listen(port, () => {
 });
 
 app.use("/api/v1", router());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Websocket
 const wss = new WebSocketServer({
