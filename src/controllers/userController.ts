@@ -179,7 +179,11 @@ export const getUserOrganization = async (
         organizationId: organization["_id"],
         organizationName: organization.organizationName,
         organizationOwner: organization.owner,
+        organizationInviteCode: organization.inviteCode,
         organizationMembers: organization.members,
+        isOwner: (organization.owner as mongoose.Types.ObjectId).equals(
+          user["_id"]
+        ),
       })
       .end();
   } catch (error) {
