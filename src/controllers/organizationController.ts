@@ -9,11 +9,7 @@ import {
   getOrganizationById,
   getOrganizationByInviteCode,
 } from "@services/organizationService";
-import {
-  getUserByEmail,
-  getUserById,
-  updateUserById,
-} from "@services/userService";
+import { getUserByEmail, updateUserById } from "@services/userService";
 import mongoose from "mongoose";
 
 export const createNewOrganization = async (
@@ -77,7 +73,8 @@ export const joinOrganization = async (
       (organization.owner as mongoose.Types.ObjectId).equals(user["_id"]) ||
       organization.members.includes(
         user["_id"] as mongoose.Types.ObjectId as any
-      )
+      ) ||
+      user.organization
     ) {
       return res
         .status(200)
