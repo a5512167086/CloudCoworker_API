@@ -6,6 +6,7 @@ import {
   register,
   login,
   checkLogin,
+  getUserOrganization,
 } from "@controllers/userController";
 import isAuth from "@middlewares/userValidation";
 
@@ -14,7 +15,7 @@ export default (router: express.Router) => {
   router.get("/users/checkLogin", isAuth, checkLogin);
   router.delete("/users/:id", isAuth, deleteUser);
   router.patch("/users/:id", isAuth, updateUser);
-
+  router.post("users/getOrganization", isAuth, getUserOrganization);
   router.post("/users/register", register);
   router.post("/users/login", login);
 };

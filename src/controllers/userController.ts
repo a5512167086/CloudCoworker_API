@@ -7,6 +7,8 @@ import {
   getUserById,
   createUser,
 } from "@services/userService";
+import { getOrganizationById } from "@services/organizationService";
+import mongoose from "mongoose";
 
 export const getAllUsers = async (
   req: express.Request,
@@ -145,6 +147,40 @@ export const checkLogin = async (
     return res
       .status(200)
       .json({ userEmail: user.email, userName: user.username, token: token })
+      .end();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
+  }
+};
+
+export const getUserOrganization = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const token = req.headers.authorization!.split(" ")[1];
+    const userData = jwt.decode(token) as JwtPayload;
+    const user = await getUserByEmail(userData.email);
+    if (!user) {
+      return res.status(400).json({ message: "User not found" }).end();
+    }
+
+    const organization = await getOrganizationById(
+      user.organization as mongoose.Types.ObjectId
+    );
+    if (!organization) {
+      return res.status(400).json({ message: "Organization not found" }).end();
+    }
+
+    return res
+      .status(200)
+      .json({
+        organizationId: organization["_id"],
+        organizationName: organization.organizationName,
+        organizationOwner: organization.owner,
+        organizationMembers: organization.members,
+      })
       .end();
   } catch (error) {
     console.log(error);
