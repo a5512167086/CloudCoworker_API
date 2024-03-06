@@ -59,7 +59,7 @@ export const updateUser = async (
       return res.status(400).end();
     }
 
-    const user = await getUserById(id);
+    const user = await getUserById(id as unknown as mongoose.Types.ObjectId);
 
     if (user === null) {
       return res.status(400).end();
@@ -172,15 +172,29 @@ export const getUserOrganization = async (
     if (!organization) {
       return res.status(400).json({ message: "Organization not found" }).end();
     }
+    const owner = await getUserById(
+      organization.owner as mongoose.Types.ObjectId
+    );
+    const memberData = [];
+    for (let member of organization.members) {
+      const user = await getUserById(member as mongoose.Types.ObjectId);
+      await memberData.push({
+        userEmail: user!.email,
+        userName: user!.username,
+      });
+    }
 
     return res
       .status(200)
       .json({
         organizationId: organization["_id"],
         organizationName: organization.organizationName,
-        organizationOwner: organization.owner,
+        organizationOwner: {
+          userEmail: owner!.email,
+          userName: owner!.username,
+        },
         organizationInviteCode: organization.inviteCode,
-        organizationMembers: organization.members,
+        organizationMembers: memberData,
         isOwner: (organization.owner as mongoose.Types.ObjectId).equals(
           user["_id"]
         ),

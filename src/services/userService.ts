@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 
 export const getUsers = () => UserModel.find({}, { password: 0 });
 
-export const getUserById = (id: string) =>
+export const getUserById = (id: mongoose.Types.ObjectId) =>
   UserModel.findById(id, { password: 0 });
 
 export const getUserByEmail = (email: string) =>
